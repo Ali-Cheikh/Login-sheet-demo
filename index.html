@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Sign Up</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta property="og:title" content="Ali Cheikh ">
+    <meta property="og:description" content="this is my simple log in and signup website">
+    <meta property="og:image" content="https://blog.golayer.io/uploads/images/article/_1200x630_crop_center-center_82_none/How-Secure-Is-Google-Sheets-Google-Sheets-Security-Tips.jpg?mtime=1672317864">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .card {
+            transition: box-shadow 0.3s ease;
+        }
+        .card:hover {
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container ">
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3"  style="margin-top: 30vh;">
+                <form id="signupForm">
+                    <h2>Sign Up</h2>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                    </div>
+                    <p><center><strong>Should have :</strong> Capital+Minuscule letters / Number / 8 Characters</center></p>
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+                        <button type="button" id="signupButton" class="btn btn-warning">Sign Up</button>
+                        <p style="display: inline-block; vertical-align: middle; margin: 0 10px;">Or</p>
+                        <button type="button" id="toggleToLogin" class="btn btn-info"> Log In</button>
+                    </div>
+                    <hr>
+                </form>
+                <form id="loginForm" style="display: none">
+                    <h2>Login</h2>
+                    <div class="form-group">
+                        <label for="loginEmail">Email address</label>
+                        <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="Enter email" required pattern=".*\S+.*" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" pattern="[a-zA-Z0-9!@#$%^&*()_+\\-={}:;<>?,.]{8,}" placeholder="Password" required>
+                    </div>
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+                        <button type="submit" id="loginButton" class="btn btn-warning">Login</button>
+                        <p style="display: inline-block; vertical-align: middle; margin: 0 10px;">Or</p>
+                        <button type="submit" id="toggleSignIn" class="btn btn-info"> Sign Up</button>
+                    </div>
+                    <p><center><strong>Forgot Password :</strong> Click <span style="font-weight: bold;color: rgb(109, 109, 252);" onclick="passwordF()"> here</span></center></p>
+                    <hr>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container fixed-top" id="dashboard" style="display: none;">
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3">
+                <button class="btn float-right bg-info text-light" onclick="window.location.reload();">Log Out</button>
+                <h2>Dashboard</h2>
+                <div class="card mt-3" onclick="window.location.href='/generate-password.html'" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Generate Password</h5>
+                        <p class="card-text">Strong Passwords Generation</p>
+                    </div>
+                </div>
+                <div class="card mt-3" onclick="window.location.href='/user-passwords.html'" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Password Dashboard</h5>
+                        <p class="card-text">View your Generated & Saved Passwords</p>
+                    </div>
+                </div>
+                <div class="card mt-3" onclick="window.location.href='/password-strength-meter.html'" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Password Strength Meter</h5>
+                        <p class="card-text">Integrate a password strength meter.</p>
+                    </div>
+                </div>
+                <!-- Add more cards for other features -->
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        // Get the form and button elements
+        var formLogin = document.getElementById('loginForm');
+        var formSingUp = document.getElementById('signupForm');
+
+        // show log in form
+        toggleToLogin.addEventListener('click', function() {
+            // Check if the form is currently hidden
+            if (formLogin.style.display === 'none') {
+                formLogin.style.display = 'block'; // Show the form
+                formSingUp.style.display = 'none'; // hide the form
+            } else {
+                formSingUp.style.display = 'none'; // hide the form
+            }
+        });
+
+        // show sign-up form
+        toggleSignIn.addEventListener('click', function() {
+            if (formSingUp.style.display === 'none') {
+                formSingUp.style.display = 'block'; // Show the form
+                formLogin.style.display = 'none'; // Hide the form
+            } else {
+                formLogin.style.display = 'none'; // Hide the form
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to hide sign-up and login forms
+            function hideForms() {
+                document.getElementById('signupForm').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'none';
+            }
+            // Function to hide login form
+            function ShowLogin() {
+                document.getElementById('loginForm').style.display = 'block';
+            }
+            // Function to hide sign-up form
+            function hideSignup() {
+                document.getElementById('signupForm').style.display = 'none';
+            }
+
+            // Function to show dashboard
+            function showDashboard() {
+                document.getElementById('dashboard').style.display = 'block';
+            }
+
+            var google = 'https://script.google.com/macros/s/AKfycbwVHmvvLlfpVXbGHDxTNGKCJbcha7XvITiBKE32jEqtCTx4Y71n-V227hRcfJxUL9oz0Q/exec';
+
+            // Sign up button click event
+            document.getElementById('signupButton').addEventListener('click', function (event) {
+                event.preventDefault();
+                var email = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+
+                // Regular expression for email validation
+                var emailRegex = /^\S+@\S+\.\S+$/;
+                if (!emailRegex.test(email)) {
+                    Swal.fire({
+                        title:'Wrong email format',
+                        showConfirmButton: false,
+                        allowOutsideClick: true,
+                    });
+                    return;
+                }
+
+                // Regular expression for password validation
+                var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+                if (!passwordRegex.test(password)) {
+                    Swal.fire({
+                        title:'Wrong Password format',
+                        showConfirmButton: false,
+                        allowOutsideClick: true,
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Please wait...',
+                    text: 'Signing you up',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                });
+                // Send data to Google Sheets
+                fetch(google, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'action=storeData&email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password)
+                })
+                    .then(function (response) {
+                        if (response.ok) {
+                            return response.text();
+                        }
+                        throw new Error('Network response was not ok.');
+                    })
+                    .then(function (data) {
+                        hideSignup();
+                        ShowLogin();
+                        Swal.fire(
+                            'Success!',
+                            'You have successfully signed up.',
+                            'success'
+                        );
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                        Swal.fire(
+                            'Error!',
+                            'An error occurred while signing up. Please try again later.',
+                            'error'
+                        );
+                    });
+            });
+
+            // Login button click event
+            document.getElementById('loginButton').addEventListener('click', function (event) {
+                event.preventDefault();
+                var email = document.getElementById('loginEmail').value;
+                var password = document.getElementById('loginPassword').value;
+
+                // Regular expression for email validation
+                var emailRegex = /^\S+@\S+\.\S+$/;
+                if (!emailRegex.test(email)) {
+                    Swal.fire({
+                        title:'Wrong email format',
+                        showConfirmButton: false,
+                        allowOutsideClick: true,
+                    });
+                    return;
+                }
+
+                // Regular expression for password validation
+                var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+                if (!passwordRegex.test(password)) {
+                    Swal.fire({
+                        title:'Wrong Password format',
+                        showConfirmButton: false,
+                        allowOutsideClick: true,
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Please wait...',
+                    text: 'Logging you in',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                });
+
+                fetch(google, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'action=checkCredentials&email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password)
+                })
+                    .then(function (response) {
+                        if (response.ok) {
+                            return response.text();
+                        }
+                        throw new Error('Network response was not ok.');
+                    })
+                    .then(function (data) {
+                        if (data.trim() === "Success") {
+                            hideForms();
+                            showDashboard();
+                            Swal.fire({
+                                icon:'Success!',
+                                title: 'You have successfully logged in.',
+                                text: 'success',
+                                showConfirmButton: false,
+                                allowOutsideClick: true,
+                            });
+                            showDashboard(); // Show dashboard upon successful login
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'Incorrect email or password. Please try again.',
+                                'error'
+                            );
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                        Swal.fire(
+                            'Error!',
+                            'An error occurred while logging in. Please try again later.',
+                            'error'
+                        );
+                    });
+            });
+        });
+    </script>
+    <script>
+        function passwordF() {
+            Swal.fire({
+                icon: 'info',
+                title: '<strong>Password Recovery 🤩</strong>',
+                html: `
+                <b>email us your <u>Account</u> we will send you the <i>Password</i></b>
+                `,
+                text: `tttt`,
+                footer: '<a href="mailto:website.support@gmail.com">website.support@gmail.com</a>',
+                confirmButtonText: 'Cancel'
+            });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
